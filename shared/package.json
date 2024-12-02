@@ -1,0 +1,20 @@
+{
+  "name": "shared-vpn-master",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "build": "rm -rf dist dis & tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+      "zod": "^3.23.8"
+  },
+  "devDependencies": {
+      "@types/node": "^22.9.0",
+      "eslint": "^8.42.0"
+  }
+}

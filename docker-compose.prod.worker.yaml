@@ -1,0 +1,15 @@
+version: '3'
+services:
+  proxy:
+    container_name: https_proxy
+    build:
+      dockerfile: "./squid/Dockerfile"
+      args:
+        - APPDIR=squid
+    restart: always
+    ports:
+      - "3128:3128"
+      - "4040:4040"
+    volumes: 
+      - "./squid/squid.pem:/etc/squid/ssl_cert/squid.pem:ro"
+      - "./squid/passwd:/etc/squid/passwd:ro"

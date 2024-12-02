@@ -1,0 +1,44 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["ESNext"],
+        "skipLibCheck": true,
+        "outDir": "dist",
+        "rootDir": null, //НЕЛЬЗЯ В БИБЛИОТЕКЕ
+        "baseUrl": null, //НЕЛЬЗЯ В БИБЛИОТЕКЕ
+        "sourceMap": true,
+        "declaration": true, // Генерация файлов типов
+        "declarationMap": true,
+        "moduleResolution": "node", // Разрешение модулей Node.js
+        "resolveJsonModule": true, // Разрешение модулей JSON
+        "isolatedModules": true,
+
+        //
+        //
+        "strict": true, //!
+        "strictNullChecks": true, //!
+        "strictFunctionTypes": true, //!
+        "strictBindCallApply": true, //!
+        "strictPropertyInitialization": true, //!
+        "noImplicitAny": true, //!
+        "noImplicitThis": true, //!
+        "alwaysStrict": true, //!
+        "noImplicitReturns": true, //!
+        "noFallthroughCasesInSwitch": true, //!
+        "noUnusedParameters": false, //EDIT://!
+        "noUnusedLocals": false, //EDIT://!
+        "exactOptionalPropertyTypes": false, //EDIT FOR ZOD
+        "noImplicitOverride": true, //!
+        "noPropertyAccessFromIndexSignature": true, //!
+        "noUncheckedIndexedAccess": true, //!
+        "useUnknownInCatchVariables": true, //!
+        "allowUnreachableCode": true //EDIT://!
+    },
+
+    "watch": true,
+    "include": ["src"], // Включение всех файлов из каталога src
+    "exclude": ["node_modules", "**/*.test.ts"]
+}
