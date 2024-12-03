@@ -1,6 +1,6 @@
+import { Exactly, ZodSafe } from 'infrastructure/libs/zod/zod';
 import { z } from 'zod';
-import { Exactly, ZodSafe } from '../lib/zod';
-import { EnumUserRole, TUser, TUserJwtData } from '../types/user.entities';
+import { EnumUserRole, TUser, TUserCreate, TUserJwtData } from '../types/user.entities';
 import { SchemaSubscription } from './payment.schema';
 import { SchemaProxy } from './proxy.schema';
 
@@ -25,3 +25,7 @@ export const SchemaUserJwtData = ZodSafe(
         version: z.number(),
     }),
 ).infer<Exactly<TUserJwtData>>();
+
+export const SchemaUserCreate = ZodSafe(SchemaUser.omit({ id: true })).infer<
+    Exactly<TUserCreate>
+>();

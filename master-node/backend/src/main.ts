@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { ZodValidationPipe } from 'nestjs-zod';
-import { AppModule } from './app.module';
+import { AppModule } from './infrastructure/app.module';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);

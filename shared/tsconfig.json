@@ -39,6 +39,6 @@
     },
 
     "watch": true,
-    "include": ["src"], // Включение всех файлов из каталога src
+    "include": ["src", "src/index.ts"], // Включение всех файлов из каталога src
     "exclude": ["node_modules", "**/*.test.ts"]
 }

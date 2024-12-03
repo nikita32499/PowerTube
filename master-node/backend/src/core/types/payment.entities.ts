@@ -15,6 +15,7 @@ export enum EnumPaymentCurrency {
 export enum EnumEnumPaymentType {
     CARD = 'card',
     SBP = 'sbp',
+    CRYPTO = 'crypto',
 }
 
 export enum EnumSubscriptionStatus {

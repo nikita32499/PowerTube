@@ -1,5 +1,5 @@
-import { TSubscription } from './payment.entities'
-import { TProxy } from './proxy.entities'
+import { TSubscription } from './payment.entities';
+import { TProxy } from './proxy.entities';
 
 export enum EnumUserRole {
     USER = 'USER',

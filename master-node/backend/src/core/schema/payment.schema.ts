@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { Exactly, ZodSafe } from '../lib/zod';
+
+import { Exactly, ZodSafe } from 'infrastructure/libs/zod/zod';
 import {
     EnumEnumPaymentType,
     EnumPaymentCurrency,
