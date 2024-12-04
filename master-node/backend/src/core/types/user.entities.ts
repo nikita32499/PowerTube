@@ -18,7 +18,7 @@ export type TUser = {
     createdAt: number;
     subscription: TSubscription;
     proxy: TProxy | null;
-    active: boolean;    
+    active: boolean;
 };
 
 export type TUserJwtData = {

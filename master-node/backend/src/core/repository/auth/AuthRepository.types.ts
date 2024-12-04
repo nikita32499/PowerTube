@@ -1,11 +1,14 @@
-import { TUserJwtData } from 'shared-vpn-master';
+import { TUserJwtData } from 'core/types/user.entities';
 
-export type AuthRepository = PromisifyMethods<{
-    cryptPassword(password: string): string;
+export type AuthRepository = PromisifyMethods<
+    {
+        cryptPassword(password: string): string;
 
-    comparePassword(password: string, passwordHash: string): boolean;
+        comparePassword(password: string, passwordHash: string): boolean;
 
-    createUserToken(data: TUserJwtData): string;
+        createUserToken(data: TUserJwtData): string;
 
-    validateToken(token: string): TUserJwtData | null;
-}>;
+        validateToken(token: string): TUserJwtData | null;
+    },
+    'validateToken'
+>;

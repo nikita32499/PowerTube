@@ -27,8 +27,8 @@ export enum EnumSubscriptionStatus {
 
 // Тип для описания валюты
 export type TPaymentMethod = {
-    currency: EnumPaymentCurrency.RUB;
-    type: EnumEnumPaymentType.CARD | EnumEnumPaymentType.SBP;
+    currency: EnumPaymentCurrency;
+    type: EnumEnumPaymentType;
 };
 // | {
 //       type: EnumEnumPaymentType.CRYPTO;

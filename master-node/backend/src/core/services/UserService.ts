@@ -3,17 +3,7 @@ import { IUserService } from 'core/repository/user/UserService.types';
 import { UserRepository } from '../repository/user/UserRepository.types';
 
 export default class UserService implements IUserService {
-    // userRoles: Record<string, EnumUserRole> = {};
-
-    constructor(readonly userRepository: UserRepository) {
-        // this.setUserRoles();
-    }
-
-    // private setUserRoles = () => {
-    //     this.userRepository.getAll().forEach((user) => {
-    //         this.userRoles[user.id] = user.role;
-    //     });
-    // };
+    constructor(readonly userRepository: UserRepository) {}
 
     getAll: IUserService['getAll'] = () => {
         return this.userRepository.getAll();

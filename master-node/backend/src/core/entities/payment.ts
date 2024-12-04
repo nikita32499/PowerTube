@@ -1,11 +1,11 @@
 import {
     EnumPaymentStatus,
     EnumSubscriptionPeriod,
+    EnumSubscriptionStatus,
     TPayment,
     TPaymentMethod,
     TSubscription,
-} from 'shared-vpn-master';
-import { EnumSubscriptionStatus } from 'shared-vpn-master/src/types/payment.entities';
+} from 'core/types/payment.entities';
 
 export class Payment implements TPayment {
     id: number;

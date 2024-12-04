@@ -38,7 +38,6 @@
         "nestjs-zod": "^4.2.0",
         "reflect-metadata": "^0.2.0",
         "rxjs": "^7.8.1",
-        "shared-vpn-master": "file:../../shared",
         "socket.io": "^4.8.1",
         "typeorm": "^0.3.20",
         "zod": "^3.23.8"

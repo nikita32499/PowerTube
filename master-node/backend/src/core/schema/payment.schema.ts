@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-import { Exactly, ZodSafe } from 'infrastructure/libs/zod/zod';
 import {
     EnumEnumPaymentType,
     EnumPaymentCurrency,
@@ -9,7 +8,8 @@ import {
     EnumSubscriptionStatus,
     TPayment,
     TSubscription,
-} from '../types/payment.entities';
+} from 'core/types/payment.entities';
+import { Exactly, ZodSafe } from 'infrastructure/libs/zod/zod';
 
 export const SchemaPayment = ZodSafe(
     z.object({
@@ -19,10 +19,7 @@ export const SchemaPayment = ZodSafe(
         createdAt: z.number(),
         method: z.object({
             currency: z.nativeEnum(EnumPaymentCurrency),
-            type: z.union([
-                z.literal(EnumEnumPaymentType.CARD),
-                z.literal(EnumEnumPaymentType.SBP),
-            ]),
+            type: z.nativeEnum(EnumEnumPaymentType),
         }),
         period: z.nativeEnum(EnumSubscriptionPeriod),
         details: z.union([z.string(), z.null()]),

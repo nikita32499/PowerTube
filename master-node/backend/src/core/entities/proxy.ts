@@ -1,4 +1,4 @@
-import { EnumProxyType, TProxy } from 'shared-vpn-master';
+import { EnumProxyType, TProxy } from 'core/types/proxy.entities';
 
 export class Proxy implements TProxy {
     id: number;

@@ -10,18 +10,21 @@ export type SchemaMongoose<T> = {
           : T[K] extends object | null
             ?
                   | SchemaMongoose<Exclude<T[K], null>>
-                  | ({
+                  | {
                         type: Schema<Exclude<T[K], null>>;
-                    } & MongoType<T[K]>)
+                        required: boolean;
+                        default?: T[K];
+                    }
             : T[K] extends number
-              ? { type: NumberConstructor } & MongoType<T[K]>
+              ? { type: NumberConstructor; default?: T[K]; required: boolean }
               : T[K] extends boolean
-                ? { type: BooleanConstructor } & MongoType<T[K]>
+                ? { type: BooleanConstructor; default?: T[K]; required: boolean }
                 : T[K] extends string
                   ? {
                         type: StringConstructor;
-
+                        default?: T[K];
+                        required: boolean;
                         enum?: T[K][];
-                    } & MongoType<T[K]>
+                    }
                   : any;
 };

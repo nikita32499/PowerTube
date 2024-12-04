@@ -1,5 +1,5 @@
+import { EnumUserRole } from 'core/types/user.entities';
 import { createZodDto } from 'nestjs-zod';
-import { EnumUserRole } from 'shared-vpn-master';
 import { z } from 'zod';
 
 export class DtoAuthSetAuth extends createZodDto(

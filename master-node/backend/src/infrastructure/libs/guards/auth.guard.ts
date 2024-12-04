@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 
 import { Reflector } from '@nestjs/core';
 
-import { Config } from '_libs/config';
 import { AuthService } from 'core/services/AuthService';
 import UserService from 'core/services/UserService';
+import { Config } from '../config';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -33,14 +33,14 @@ export class JwtAuthGuard implements CanActivate {
 
         if (!token) return false;
 
-        const user_data = this.authService.validateToken(token);
-        if (user_data) {
-            request.user = user_data;
+        const userData = this.authService.validateToken(token);
+        if (userData) {
+            request.user = userData;
         } else {
             return false;
         }
 
-        const userRole = this.userService.resolveRoleByUserId(user_data.userId);
+        const userRole = this.userService.getUserRole(userData.userId);
 
         if (userRole && roles.includes(userRole)) return true;
 

@@ -1,4 +1,6 @@
-import { EnumUserRole, TProxy, TSubscription, TUser } from 'shared-vpn-master';
+import { TSubscription } from 'core/types/payment.entities';
+import { TProxy } from 'core/types/proxy.entities';
+import { EnumUserRole, TUser } from 'core/types/user.entities';
 import { Subscription } from './payment';
 import { Proxy } from './proxy';
 

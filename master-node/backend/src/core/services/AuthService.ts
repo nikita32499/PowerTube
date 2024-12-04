@@ -1,6 +1,8 @@
 import { AuthRepository } from 'core/repository/auth/AuthRepository.types';
 import { IAuthService } from 'core/repository/auth/AuthService.types';
-import { EnumSubscriptionStatus, EnumUserRole, TUserCreate } from 'shared-vpn-master';
+
+import { EnumSubscriptionStatus } from 'core/types/payment.entities';
+import { EnumUserRole, TUserCreate } from 'core/types/user.entities';
 import UserService from './UserService';
 
 export class AuthService implements IAuthService {
