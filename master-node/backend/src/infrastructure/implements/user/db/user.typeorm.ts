@@ -3,6 +3,12 @@
 // import { EnumUserRole, TSubscription, TUser } from 'shared-vpn-master';
 // import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
 
+import { EnumUserRole, TUser } from 'core/types/user.entities';
+import { SubscriptionDB } from 'infrastructure/implements/payment/db/payment.typeorm';
+import { ProxyDB } from 'infrastructure/implements/proxy/db/proxy.typeorm';
+import { EntitySchemaTyped } from 'infrastructure/libs/typeorm/typeorm.libs';
+import { EntitySchema } from 'typeorm';
+
 // @Entity('users')
 // export class UserModel implements TUser {
 //     @Column('string', { nullable: true })
@@ -46,3 +52,54 @@
 //     @Column('number', { default: 0 })
 //     declare jwtVersion: number;
 // }
+
+export const UserDB = new EntitySchemaTyped<TUser, 'subscription' | 'proxy'>({
+    name: 'User', // Имя сущности
+    tableName: 'users', // Опционально, если имя таблицы отличается
+    columns: {
+        id: {
+            type: 'varchar',
+            nullable: false,
+            primary: true,
+            
+        },
+
+        passwordHash: {
+            type: 'varchar',
+            nullable: true,
+        },
+        email: {
+            type: 'varchar',
+            nullable: true,
+        },  
+        role: {
+            type: 'enum',
+            enum: EnumUserRole,
+            nullable: false,
+        },
+        jwtVersion: {
+            type: 'int',
+            nullable: false,
+        },
+        lastAt: {
+            type: 'bigint',
+            nullable: true,
+        },  
+        createdAt: {
+            type: 'bigint',
+            nullable: false,
+        },
+        active: {
+            type: 'boolean',
+            nullable: false,
+        },  
+    },  
+    embeddeds: {
+        subscription: {
+            schema: SubscriptionDB,
+        },
+        proxy: {
+            schema: ProxyDB,
+        },
+    },
+});

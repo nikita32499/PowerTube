@@ -6,6 +6,7 @@ import { JwtAuthGuard } from '_libs/guards/auth.guard';
 import { PaymentModel } from 'infrastructure/implements/payment/db/payment.typeorm';
 import { ProxyModel } from 'infrastructure/implements/proxy/db/proxy.typeorm';
 import { UserModel } from 'infrastructure/implements/user/db/user.typeorm';
+import { PaymentService } from './payment/payment.service';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { UserModel } from 'infrastructure/implements/user/db/user.typeorm';
             provide: APP_GUARD,
             useClass: JwtAuthGuard,
         },
+        PaymentService,
     ],
 })
 export class AppModule {}
