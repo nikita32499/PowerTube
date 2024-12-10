@@ -18,7 +18,8 @@ services:
             - path: ./master-node/nginx/route.conf 
               target: /etc/nginx/conf.d/default.conf
               action: sync+restart
-        network_mode: host
+        ports:
+          - "80:80"
         attach: false
     master-postgres:
         container_name: powertube_master_postgres_dev
@@ -27,7 +28,8 @@ services:
         env_file: .env.dev
         volumes:
             - /var/postgres_data:/var/lib/postgresql/data
-        network_mode: host
+        expose:
+          - "5432"
         attach: false
     master-nestjs:
         container_name: powertube_master_nestjs_dev
@@ -36,7 +38,8 @@ services:
             target: dev
             args:
               APPDIR: "."
-            
+        expose:
+          - "3001"
         restart: always
         env_file: .env.dev
         depends_on:
@@ -53,7 +56,7 @@ services:
                 - .vscode
         volumes:
         - ./shared/:/shared:ro
-        network_mode: host
+        
 
 
 #######################
@@ -66,7 +69,7 @@ services:
           args:
             APPDIR: "."
         restart: always
-        network_mode: host
+        
         volumes: 
           - "./worker-node/squid/squid.pem:/etc/squid/ssl_cert/squid.pem:ro"
           - "./worker-node/squid/passwd:/etc/squid/passwd:ro"
@@ -95,7 +98,7 @@ services:
     #             - .vscode
     #     volumes:
     #     - ./shared/:/shared:ro
-    #     network_mode: host
+    #     
 
 # networks:
 #   host_net:

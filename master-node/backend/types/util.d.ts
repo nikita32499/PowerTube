@@ -6,6 +6,10 @@ declare global {
               ? (...args: A) => Promise<R>
               : T[K];
     };
+
+    type P<T extends object> = {
+        [K in keyof T]: T[K] extends object ? P<T[K]> : T[K];
+    } & {};
 }
 
 export {};

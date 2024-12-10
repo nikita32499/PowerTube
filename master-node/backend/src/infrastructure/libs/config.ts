@@ -9,6 +9,7 @@ export const Config = z
         POSTGRES_USER: z.string(),
         POSTGRES_PASSWORD: z.string(),
         POSTGRES_DATABASE: z.string(),
+        NODE_MODE: z.enum(['dev', 'build', 'prod']),
     })
     .parse({
         ...process.env,

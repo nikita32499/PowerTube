@@ -1,11 +1,12 @@
-import { TSubscription } from 'core/types/payment.entities';
-import { TProxy } from 'core/types/proxy.entities';
-import { EnumUserRole, TUser } from 'core/types/user.entities';
+import { TSubscription } from 'core/repository/payment/types/payment.entities';
+import { TProxy } from 'core/repository/proxy/types/proxy.entities';
+import { EnumUserRole, TUser } from 'core/repository/user/types/user.entities';
 import { Subscription } from './payment';
 import { Proxy } from './proxy';
 
 export class User implements TUser {
     id: string;
+    authId: string;
     passwordHash: string | null;
     email: string | null;
     role: EnumUserRole;
@@ -18,6 +19,7 @@ export class User implements TUser {
 
     constructor(userData: TUser) {
         this.id = userData.id;
+        this.authId = userData.authId;
         this.email = userData.email;
         this.passwordHash = userData.passwordHash;
         this.role = userData.role;

@@ -1,33 +1,34 @@
 import { User } from 'core/entities/user';
-import { EnumUserRole, TUserCreate } from 'core/types/user.entities';
-import { DtoAuthSetAuth, DtoAuthSetRole } from '../auth/dto/auth.dto';
-import { DtoUserCancelJwt, DtoUserSetEmail } from './dto/set.dto';
+import { TUserCreate, TUserSetAuth } from 'core/repository/user/types/user.operations';
+
+import { UserAccessLevel } from './UserRepository.types';
+import { EnumUserRole } from './types/user.entities';
 
 export type IUserService = PromisifyMethods<
     {
-        create(data: TUserCreate): User;
+        create(data: TUserCreate['Entity']): User;
 
-        updateLastAt(id: User['id']): boolean;
+        updateLastAt(userId: User['id']): boolean;
 
-        setAuth(data: DtoAuthSetAuth): boolean;
+        // setAuth(data: TAuthOperation['DtoAuthSetAuth']): boolean;
 
-        setEmail(data: DtoUserSetEmail): boolean;
+        // setEmail(data: TUserSetEmail['Request']): boolean;
 
-        setAuth(data: DtoAuthSetAuth): boolean;
+        setAuth(userId: User['id'], data: TUserSetAuth['Request']): boolean;
 
-        setRole(data: DtoAuthSetRole): boolean;
+        setRole(userID: User['id'], role: EnumUserRole): boolean;
 
-        cancelJwt(data: DtoUserCancelJwt): boolean;
+        cancelJwt(userId: User['id']): boolean;
 
-        delete(id: User['id']): boolean;
+        delete(userId: User['id']): boolean;
 
         getByEmail(email: User['email']): User;
 
-        getById(id: User['id']): User;
+        getById(userId: User['id']): User;
 
         getAll(): User[];
 
-        getUserRole(id: User['id']): EnumUserRole;
+        getUserAccessLevel(userId: User['id']): UserAccessLevel;
     },
-    'getUserRole'
+    'getUserAccessLevel'
 >;

@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Config } from '_libs/config';
-import { JwtAuthGuard } from '_libs/guards/auth.guard';
-import { PaymentModel } from 'infrastructure/implements/payment/db/payment.typeorm';
-import { ProxyModel } from 'infrastructure/implements/proxy/db/proxy.typeorm';
-import { UserModel } from 'infrastructure/implements/user/db/user.typeorm';
-import { PaymentService } from './payment/payment.service';
+import { UserDB } from 'infrastructure/modules/user/db/user.typeorm';
+import { Config } from './libs/config';
+import { JwtAuthGuard } from './libs/guards/auth.guard';
+
+import { AuthModule } from './modules/auth/auth.module';
+import { PaymentDB } from './modules/payment/db/payment.typeorm';
+import { PaymentModule } from './modules/payment/payment.module';
+import { ProxyDB } from './modules/proxy/db/proxy.typeorm';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
     imports: [
@@ -17,13 +20,15 @@ import { PaymentService } from './payment/payment.service';
             username: Config.POSTGRES_USER,
             password: Config.POSTGRES_PASSWORD,
             database: Config.POSTGRES_DATABASE,
-            entities: [UserModel, ProxyModel, PaymentModel],
+            entities: [UserDB, PaymentDB, ProxyDB],
             autoLoadEntities: true,
-            synchronize: true,
+            synchronize: false,
+            migrationsRun: Config.NODE_MODE === 'dev',
         }),
-        UserModule,
-        ProxyModule,
         PaymentModule,
+        UserModule,
+        AuthModule,
+        // LoggerModule,
     ],
     controllers: [],
     providers: [
@@ -31,7 +36,6 @@ import { PaymentService } from './payment/payment.service';
             provide: APP_GUARD,
             useClass: JwtAuthGuard,
         },
-        PaymentService,
     ],
 })
 export class AppModule {}

@@ -5,32 +5,38 @@ import {
     TPayment,
     TPaymentMethod,
     TSubscription,
-} from 'core/types/payment.entities';
+    TSubscriptionTariff,
+} from 'core/repository/payment/types/payment.entities';
 
 export class Payment implements TPayment {
-    id: number;
-    subscriptionId: string;
+    id: string;
+    transactionId: string;
+    userId: string;
     status: EnumPaymentStatus;
     createdAt: number;
     method: TPaymentMethod;
     period: EnumSubscriptionPeriod;
+    tariff: TSubscriptionTariff;
     details: string | null;
-
     constructor({
         id,
-        subscriptionId,
+        transactionId,
+        userId,
         status,
         createdAt,
         method,
         period,
         details,
+        tariff,
     }: TPayment) {
         this.id = id;
-        this.subscriptionId = subscriptionId;
+        this.transactionId = transactionId;
+        this.userId = userId;
         this.status = status;
         this.createdAt = createdAt;
         this.method = method;
         this.period = period;
+        this.tariff = tariff;
         this.details = details;
     }
 }

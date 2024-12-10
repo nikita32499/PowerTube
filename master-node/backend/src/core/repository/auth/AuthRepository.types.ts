@@ -1,4 +1,4 @@
-import { TUserJwtData } from 'core/types/user.entities';
+import { TUserJwtData } from 'core/repository/user/types/user.entities';
 
 export type AuthRepository = PromisifyMethods<
     {

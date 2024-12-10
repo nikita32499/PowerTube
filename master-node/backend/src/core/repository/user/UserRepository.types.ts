@@ -1,8 +1,12 @@
 import { User } from 'core/entities/user';
-import { EnumUserRole, TUserCreate } from 'core/types/user.entities';
-export type UserRepository = PromisifyMethods<
+import { EnumUserRole } from 'core/repository/user/types/user.entities';
+import { TUserCreate } from 'core/repository/user/types/user.operations';
+
+export type UserAccessLevel = { role: EnumUserRole; jwtVersion: number };
+
+export type UserDatabaseRepository = PromisifyMethods<
     {
-        userRoles: Record<User['id'], EnumUserRole>;
+        usersAccessLevel: Record<User['id'], UserAccessLevel>;
 
         getAll(): User[];
 
@@ -12,11 +16,11 @@ export type UserRepository = PromisifyMethods<
 
         update(id: User['id'], update: Partial<User>): boolean;
 
-        create(data: TUserCreate): User;
+        create(data: TUserCreate['Entity']): User;
 
-        getUserRole(id: User['id']): EnumUserRole;
+        getUserAccessLevel(id: User['id']): UserAccessLevel;
 
-        updateUserRoles(): boolean;
+        updateUserAccessLevel(): boolean;
     },
-    'getUserRole'
+    'getUserAccessLevel'
 >;

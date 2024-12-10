@@ -1,7 +1,7 @@
-import { EnumProxyType, TProxy } from 'core/types/proxy.entities';
+import { EnumProxyType, TProxy } from 'core/repository/proxy/types/proxy.entities';
 
 export class Proxy implements TProxy {
-    id: number;
+    id: string;
 
     type: EnumProxyType;
     login: string;

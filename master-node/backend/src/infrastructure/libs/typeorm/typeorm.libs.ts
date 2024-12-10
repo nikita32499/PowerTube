@@ -1,4 +1,3 @@
-import { TPayment } from 'core/types/payment.entities';
 import {
     EntitySchema,
     EntitySchemaColumnOptions,
@@ -6,26 +5,37 @@ import {
     EntitySchemaOptions,
 } from 'typeorm';
 
-class _TypeormLib_ {
-    ColumnBigIntTransformer = class {
-        public to(data: number): number {
+export class TypeormLib {
+    static BigIntConverter = class {
+        to(data: number): number {
             return data;
         }
 
-        public from(data: string): number {
+        from(data: string): number {
             return parseInt(data);
         }
     };
+
+    static isAffectedSuccess<T extends { affected?: number | null | undefined }>(
+        result: T,
+    ): boolean {
+        return typeof result.affected === 'number' && result.affected > 0 ? true : false;
+    }
+
+    static whereOptionMapper<T extends Record<string, any>>(
+        obj: T,
+    ): {
+        [K in keyof T]: Exclude<T[K], null>;
+    } {
+        return Object.entries(obj).reduce(
+            (acc, [key, value]) => ({
+                ...acc,
+                [key]: value === null && typeof value === 'object' ? 0 : value,
+            }),
+            {} as any,
+        );
+    }
 }
-
-export const TypeormLib = new _TypeormLib_();
-
-export function isUpdateSuccess<T extends { affected?: number | null | undefined }>(
-    result: T,
-): boolean {
-    return typeof result.affected === 'number' && result.affected > 0 ? true : false;
-}
-
 
 /*
 
@@ -37,49 +47,49 @@ export function isUpdateSuccess<T extends { affected?: number | null | undefined
 */
 
 type SchemaColumnType<T> =
-    T extends Array<infer El>
-    ? never
-    : T extends object
-    ? { type: 'jsonb' }
-    : T extends string
-    ? { type: 'text' | 'varchar' } | { type: 'enum'; enum: object }
-    : T extends number
-    ? { type: 'int' | 'bigint' }
-    :T extends boolean?{
-        type: 'boolean'
-    }: any;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    T extends ArrayConstructor
+        ? never
+        : T extends object
+          ? { type: 'jsonb' }
+          : T extends string
+            ? { type: 'text' | 'varchar' } | { type: 'enum'; enum: object }
+            : T extends number
+              ? { type: 'int' | 'bigint' }
+              : T extends boolean
+                ? {
+                      type: 'boolean';
+                  }
+                : any;
 
-
-
-export class EntitySchemaTyped<T, Embedds extends keyof T | '' = ''> extends EntitySchema<T> {
+export class EntitySchemaTyped<
+    T,
+    Embedds extends keyof T | '' = '',
+> extends EntitySchema<T> {
     constructor(schema: SchemaTypeOrmVariant<T, Embedds>) {
         super(schema);
     }
 }
 
-
 type SchemaTypeOrmVariant<T, Embedds extends keyof T | '' = ''> = {
-
-
     columns: {
-        [K in Exclude<keyof T, Embedds>]: (SchemaColumnType<Exclude<T[K], null>> & {
+        [K in Exclude<keyof T, Embedds>]: SchemaColumnType<Exclude<T[K], null>> & {
             nullable: null extends T[K] ? true : false;
-            default?: T[K];
-        } & EntitySchemaColumnOptions)
-    }
-
-} & (Embedds extends keyof T ? {
-    embeddeds: {
-        [K in Embedds]: (T[K] extends Array<infer El>?{
-            schema: EntitySchemaTyped<El>
-            array:true
-        }:{
-            schema: EntitySchemaTyped<T[K]>
-        }) & EntitySchemaEmbeddedColumnOptions;
-    }
-} : {
-    }) & EntitySchemaOptions<T>
-
-
-
-
+        } & EntitySchemaColumnOptions;
+    };
+} & (Embedds extends keyof T
+    ? {
+          embeddeds: {
+              [K in Embedds]: (T[K] extends Array<infer El>
+                  ? {
+                        schema: EntitySchemaTyped<El>;
+                        array: true;
+                    }
+                  : {
+                        schema: EntitySchemaTyped<T[K]>;
+                    }) &
+                  EntitySchemaEmbeddedColumnOptions;
+          };
+      }
+    : object) &
+    EntitySchemaOptions<T>;

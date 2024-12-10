@@ -4,16 +4,16 @@ import { Observable } from 'rxjs';
 
 import { Reflector } from '@nestjs/core';
 
-import { AuthService } from 'core/services/AuthService';
-import UserService from 'core/services/UserService';
+import { NestAuthService } from 'infrastructure/modules/auth/NestAuth.service';
+import { NestUserService } from 'infrastructure/modules/user/NestUser.service';
 import { Config } from '../config';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
     constructor(
         private reflector: Reflector,
-        private readonly userService: UserService,
-        private readonly authService: AuthService,
+        private readonly userService: NestUserService,
+        private readonly authService: NestAuthService,
     ) {}
 
     canActivate(
@@ -33,16 +33,21 @@ export class JwtAuthGuard implements CanActivate {
 
         if (!token) return false;
 
-        const userData = this.authService.validateToken(token);
-        if (userData) {
-            request.user = userData;
+        const userJwtData = this.authService.validateToken(token);
+        if (userJwtData) {
+            request.userJwtData = userJwtData;
         } else {
             return false;
         }
 
-        const userRole = this.userService.getUserRole(userData.userId);
+        const userAccessLevel = this.userService.getUserAccessLevel(userJwtData.userId);
 
-        if (userRole && roles.includes(userRole)) return true;
+        const roleAllowed = roles.includes(userAccessLevel.role);
+
+        const jwtVersionAllowed =
+            userAccessLevel.jwtVersion === userAccessLevel.jwtVersion;
+
+        if (roleAllowed && jwtVersionAllowed) return true;
 
         return false;
     }

@@ -1,18 +1,15 @@
-import { TUserJwtData } from 'core/types/user.entities';
+import { TUserJwtData } from 'core/repository/user/types/user.entities';
 import { User } from '../../entities/user';
-import { DtoAuthLogin, DtoAuthRegisterWithPassword } from './dto/auth.dto';
+import { TAuthLogin, TAuthRegisterWithPassword } from './types/auth.operations';
 
-export type IAuthService = PromisifyMethods<
-    {
-        registerWithPassword(data: DtoAuthRegisterWithPassword): User;
+export type IAuthService = {
+    registerWithPassword(data: TAuthRegisterWithPassword['Request']): Promise<User>;
 
-        login(data: DtoAuthLogin): User;
+    login(data: TAuthLogin['Request']): Promise<User>;
 
-        register(): User;
+    register(): Promise<User>;
 
-        createUserToken(data: TUserJwtData): string;
+    createUserToken(data: TUserJwtData): Promise<string>;
 
-        validateToken(token: string): TUserJwtData | null;
-    },
-    'validateToken'
->;
+    validateToken(token: string): TUserJwtData | null;
+};

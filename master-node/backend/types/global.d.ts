@@ -1,8 +1,8 @@
-import { TUserJwtData } from 'shared-vpn-master';
+import { TUserJwtData } from 'core/repository/user/types/user.entities';
 
 declare module 'express' {
     interface Request {
-        user?: TUserJwtData;
+        userJwtData?: TUserJwtData;
     }
 }
 

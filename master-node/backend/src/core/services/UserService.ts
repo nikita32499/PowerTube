@@ -1,69 +1,64 @@
 import { User } from 'core/entities/user';
 import { IUserService } from 'core/repository/user/UserService.types';
-import { UserRepository } from '../repository/user/UserRepository.types';
+import { UserDatabaseRepository } from '../repository/user/UserRepository.types';
 
-export default class UserService implements IUserService {
-    constructor(readonly userRepository: UserRepository) {}
+export class UserService implements IUserService {
+    constructor(
+        private readonly userDatabaseRepository: UserDatabaseRepository,
+        // private readonly logger: LoggerRepository,
+    ) {}
 
     getAll: IUserService['getAll'] = () => {
-        return this.userRepository.getAll();
+        return this.userDatabaseRepository.getAll();
     };
     getById: IUserService['getById'] = (id) => {
-        return this.userRepository.getOne({ id });
+        return this.userDatabaseRepository.getOne({ id });
     };
     getByEmail: IUserService['getByEmail'] = (email) => {
-        return this.userRepository.getOne({ email });
+        return this.userDatabaseRepository.getOne({ email });
     };
     delete: IUserService['delete'] = (id) => {
-        return this.userRepository.delete(id);
+        return this.userDatabaseRepository.delete(id);
     };
-    cancelJwt: IUserService['cancelJwt'] = async (data) => {
-        let { id, version } = data;
-        if (!version) {
-            const user = await this.userRepository.getOne({ id });
-            if (!user) {
-                throw Error('Пользователь не найден');
-            }
-            version = user.jwtVersion + 1;
+    cancelJwt: IUserService['cancelJwt'] = async (id) => {
+        const user = await this.userDatabaseRepository.getOne({ id });
+        if (!user) {
+            throw Error('Пользователь не найден');
         }
+        const version = user.jwtVersion + 1;
 
-        return this.userRepository.update(id, { jwtVersion: version });
+        return this.userDatabaseRepository.update(id, { jwtVersion: version });
     };
-    setEmail: IUserService['setEmail'] = (data) => {
-        const { id, ...update } = data;
-        return this.userRepository.update(id, update);
-    };
-    setAuth: IUserService['setAuth'] = (data) => {
-        const emailBusy = Boolean(this.getByEmail(data.email));
+
+    setAuth: IUserService['setAuth'] = (userId, update) => {
+        const emailBusy = Boolean(this.getByEmail(update.email));
 
         if (emailBusy) throw Error('Email занят');
 
-        const { id, ...update } = data;
-        return this.userRepository.update(id, update);
+        return this.userDatabaseRepository.update(userId, update);
     };
 
-    setRole: IUserService['setRole'] = (data) => {
-        const { id, ...update } = data;
-        const result = this.userRepository.update(id, update);
+    setRole: IUserService['setRole'] = (userId, role) => {
+        const result = this.userDatabaseRepository.update(userId, { role });
 
-        this.userRepository.updateUserRoles();
+        this.userDatabaseRepository.updateUserAccessLevel();
 
         return result;
     };
 
     updateLastAt: IUserService['updateLastAt'] = (id: User['id']) => {
-        return this.userRepository.update(id, { lastAt: Date.now() });
+        return this.userDatabaseRepository.update(id, { lastAt: Date.now() });
     };
 
     create: IUserService['create'] = (data) => {
-        const newUser = this.userRepository.create(data);
+        const newUser = this.userDatabaseRepository.create(data);
 
-        this.userRepository.updateUserRoles();
+        this.userDatabaseRepository.updateUserAccessLevel();
 
         return newUser;
     };
 
-    getUserRole: IUserService['getUserRole'] = (id) => {
-        return this.userRepository.getUserRole(id);
+    getUserAccessLevel: IUserService['getUserAccessLevel'] = (id) => {
+        return this.userDatabaseRepository.getUserAccessLevel(id);
     };
 }

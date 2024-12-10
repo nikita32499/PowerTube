@@ -1,14 +1,18 @@
 import { AuthRepository } from 'core/repository/auth/AuthRepository.types';
 import { IAuthService } from 'core/repository/auth/AuthService.types';
 
-import { EnumSubscriptionStatus } from 'core/types/payment.entities';
-import { EnumUserRole, TUserCreate } from 'core/types/user.entities';
-import UserService from './UserService';
+import { UserLib } from 'core/repository/lib/user';
+import { EnumSubscriptionStatus } from 'core/repository/payment/types/payment.entities';
+import { EnumUserRole } from 'core/repository/user/types/user.entities';
+import { TUserCreate } from 'core/repository/user/types/user.operations';
+import { UserService } from './UserService';
 
 export class AuthService implements IAuthService {
     constructor(
-        readonly userService: UserService,
-        readonly authRepository: AuthRepository,
+        private readonly userService: UserService,
+        private readonly authRepository: AuthRepository,
+
+        // private readonly logger: LoggerRepository,
     ) {}
 
     login: IAuthService['login'] = async (data) => {
@@ -34,7 +38,8 @@ export class AuthService implements IAuthService {
 
         if (user) throw Error('Email занят');
 
-        const createData: TUserCreate = {
+        const createData: TUserCreate['Entity'] = {
+            authId: UserLib.generateAuthId(),
             email: data.email,
             passwordHash: await this.authRepository.cryptPassword(data.password),
             role: EnumUserRole.USER,
@@ -55,7 +60,8 @@ export class AuthService implements IAuthService {
     };
 
     register: IAuthService['register'] = () => {
-        const createData: TUserCreate = {
+        const createData: TUserCreate['Entity'] = {
+            authId: UserLib.generateAuthId(),
             email: null,
             passwordHash: null,
             role: EnumUserRole.USER,
